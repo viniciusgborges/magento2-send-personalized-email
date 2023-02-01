@@ -5,6 +5,6 @@ use Magento\Framework\Component\ComponentRegistrar;
 
 ComponentRegistrar::register(
     ComponentRegistrar::MODULE,
-    'Wayne_PersonalizedEmail',
+    'Vbdev_PersonalizedEmail',
     __DIR__
 );

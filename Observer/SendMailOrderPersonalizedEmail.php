@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Wayne\PersonalizedEmail\Observer;
+namespace Vbdev\PersonalizedEmail\Observer;
 
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Wayne\PersonalizedEmail\Model\Config\OrderPersonalizedEmail;
-use Wayne\PersonalizedEmail\Model\SenderEmail;
+use Vbdev\PersonalizedEmail\Model\Config\OrderPersonalizedEmail;
+use Vbdev\PersonalizedEmail\Model\SenderEmail;
 
 class SendMailOrderPersonalizedEmail implements ObserverInterface
 {

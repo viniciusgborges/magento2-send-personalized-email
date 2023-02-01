@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Wayne\PersonalizedEmail\Model;
+namespace Vbdev\PersonalizedEmail\Model;
 
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\Template\TransportBuilder;

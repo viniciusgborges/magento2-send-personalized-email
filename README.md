@@ -1,6 +1,6 @@
 # Magento 2.4.x module Personalized Email
 
-    composer require wayne/module-personalized-email
+    composer require vbdev/magento2-send-personalized-email
 
 ## Main Functionalities
 - Attribute-based email sending module.
@@ -11,14 +11,14 @@
 
 ### Type 1: Zip file
 
-- Unzip the zip file in `app/code/Wayne`
-- Enable the module by running `php bin/magento module:enable Wayne_PersonalizedEmail`
+- Unzip the zip file in `app/code/Vbdev`
+- Enable the module by running `php bin/magento module:enable Vbdev_PersonalizedEmail`
 - Apply database updates by running `php bin/magento setup:upgrade`\*
 - Flush the cache by running `php bin/magento cache:flush`
 
 ### Type 2: Composer
 
-- Install the module composer by running `composer require wayne/module-personalized-email`
-- enable the module by running `php bin/magento module:enable Wayne_PersonalizedEmail`
+- Install the module composer by running `composer require vbdev/magento2-send-personalized-email`
+- enable the module by running `php bin/magento module:enable Vbdev_PersonalizedEmail`
 - apply database updates by running `php bin/magento setup:upgrade`\*
 - Flush the cache by running `php bin/magento cache:flush`

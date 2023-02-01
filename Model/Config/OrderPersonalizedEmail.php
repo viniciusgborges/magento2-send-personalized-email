@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Wayne\PersonalizedEmail\Model\Config;
+namespace Vbdev\PersonalizedEmail\Model\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 

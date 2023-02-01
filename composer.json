@@ -1,5 +1,5 @@
 {
-  "name": "wayne/magento2-send-personalized-email",
+  "name": "vbdev/magento2-send-personalized-email",
   "description": "A Magento 2 module Personalized Email",
   "keywords": [
     "Magento 2",
@@ -29,7 +29,7 @@
   "autoload": {
     "files": [ "registration.php" ],
     "psr-4": {
-      "Wayne\\PersonalizedEmail\\": ""
+      "Vbdev\\PersonalizedEmail\\": ""
     }
   }
 }
