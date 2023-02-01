@@ -1,0 +1,35 @@
+{
+  "name": "wayne/magento2-send-personalized-email",
+  "description": "A Magento 2 module Personalized Email",
+  "keywords": [
+    "Magento 2",
+    "Magento 2 module",
+    "Magento 2 module for send email",
+    "send email module",
+    "send email",
+    "Magento 2 extension",
+    "Magento 2 extension free"
+  ],
+  "type": "magento2-module",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Vinicius Borges",
+      "email": "viniciusg.borges@outlook.com",
+      "role": "Magento 2 Developer"
+    }
+  ],
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "require": {
+    "php": "~7.4"
+  },
+  "autoload": {
+    "files": [ "registration.php" ],
+    "psr-4": {
+      "Wayne\\PersonalizedEmail\\": ""
+    }
+  }
+}

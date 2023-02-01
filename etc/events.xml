@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="checkout_submit_all_after">
+        <observer name="checkout_onepage_controller_success_action_sendmail"
+                  instance="Wayne\PersonalizedEmail\Observer\SendMailOrderPersonalizedEmail"/>
+    </event>
+</config>
