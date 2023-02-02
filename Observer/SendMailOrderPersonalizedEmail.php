@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Vbdev\PersonalizedEmail\Observer;
 
-use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -15,36 +14,33 @@ class SendMailOrderPersonalizedEmail implements ObserverInterface
     /**
      * @var OrderPersonalizedEmail
      */
-    public $orderPersonalizedEmailConfig;
+    public OrderPersonalizedEmail $orderPersonalizedEmailConfig;
 
     /**
      * @var SenderEmail
      */
-    public $senderEmail;
-
-    /**
-     * @var ProductFactory
-     */
-    public $productFactory;
+    public SenderEmail $senderEmail;
 
     public $paramsEmail;
 
     public $orderPersonalizedEmailServiceType;
 
     public $productId;
+
+    /**
+     * @var ProductRepository
+     */
     public ProductRepository $productRepository;
 
     /**
      * @param OrderPersonalizedEmail $orderPersonalizedEmailConfig
      * @param SenderEmail $senderEmail
-     * @param ProductFactory $productFactory
      * @param ProductRepository $productRepository
      */
     public function __construct(
-        OrderPersonalizedEmail     $orderPersonalizedEmailConfig,
-        SenderEmail                $senderEmail,
-        ProductFactory             $productFactory,
-        ProductRepository $productRepository
+        OrderPersonalizedEmail $orderPersonalizedEmailConfig,
+        SenderEmail            $senderEmail,
+        ProductRepository      $productRepository
     ) {
         $this->orderPersonalizedEmailConfig = $orderPersonalizedEmailConfig;
         $this->senderEmail = $senderEmail;
@@ -101,13 +97,13 @@ class SendMailOrderPersonalizedEmail implements ObserverInterface
 
     /**
      * @return false|string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function validateServiceType()
     {
-//        $product = $this->productFactory->create()->load($this->productId);
         $product = $this->productRepository->getById($this->productId);
-        if ($product->getData('example') != null) {
-            return 'example';
+        if ($product->getData('sendmail') != null) {
+            return 'sendmail';
         }
         return false;
     }
@@ -176,7 +172,7 @@ class SendMailOrderPersonalizedEmail implements ObserverInterface
      */
     private function getOrderPersonalizedEmailTemplateId()
     {
-        if ($this->orderPersonalizedEmailServiceType == 'example') {
+        if ($this->orderPersonalizedEmailServiceType == 'sendmail') {
             return $this->orderPersonalizedEmailConfig->getOrderPersonalizedEmailTemplateExample();
         }
     }
