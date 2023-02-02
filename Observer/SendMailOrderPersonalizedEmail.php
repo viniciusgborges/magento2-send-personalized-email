@@ -44,7 +44,6 @@ class SendMailOrderPersonalizedEmail implements ObserverInterface
     ) {
         $this->orderPersonalizedEmailConfig = $orderPersonalizedEmailConfig;
         $this->senderEmail = $senderEmail;
-        $this->productFactory = $productFactory;
         $this->productRepository = $productRepository;
     }
 
