@@ -3,68 +3,54 @@ declare(strict_types=1);
 
 namespace Vbdev\PersonalizedEmail\Observer;
 
-use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Vbdev\PersonalizedEmail\Model\Config\OrderPersonalizedEmail;
 use Vbdev\PersonalizedEmail\Model\SenderEmail;
 
 class SendMailOrderPersonalizedEmail implements ObserverInterface
 {
-    /**
-     * @var OrderPersonalizedEmail
-     */
-    public OrderPersonalizedEmail $orderPersonalizedEmailConfig;
+    private OrderPersonalizedEmail $orderPersonalizedEmailConfig;
+    private SenderEmail $senderEmail;
+    private ProductAttributeRepositoryInterface $attributeRepository;
 
-    /**
-     * @var SenderEmail
-     */
-    public SenderEmail $senderEmail;
-
-    public $paramsEmail;
-
-    public $orderPersonalizedEmailServiceType;
-
-    public $productId;
-
-    /**
-     * @var ProductRepository
-     */
-    public ProductRepository $productRepository;
 
     /**
      * @param OrderPersonalizedEmail $orderPersonalizedEmailConfig
      * @param SenderEmail $senderEmail
-     * @param ProductRepository $productRepository
+     * @param ProductAttributeRepositoryInterface $attributeRepository
      */
     public function __construct(
-        OrderPersonalizedEmail $orderPersonalizedEmailConfig,
-        SenderEmail            $senderEmail,
-        ProductRepository      $productRepository
+        OrderPersonalizedEmail              $orderPersonalizedEmailConfig,
+        SenderEmail                         $senderEmail,
+        ProductAttributeRepositoryInterface $attributeRepository
     ) {
         $this->orderPersonalizedEmailConfig = $orderPersonalizedEmailConfig;
         $this->senderEmail = $senderEmail;
-        $this->productRepository = $productRepository;
+        $this->attributeRepository = $attributeRepository;
     }
 
     /**
      * @param \Magento\Framework\Event\Observer $observer
-     * @return $this|void
+     * @return $this
      * @throws LocalizedException
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer): static
     {
-        if (!$this->orderPersonalizedEmailConfig->getOrderPersonalizedEmailEnabled() || !$this->canSendEmail($observer)) {
+        if (!$this->orderPersonalizedEmailConfig->getOrderPersonalizedEmailEnabled() || !$this->canSendOrderPersonalizedEmailEmail($observer)) {
             return $this;
         }
-
-        if ($this->paramsEmail) {
+        $paramsEmail = $this->getParamsEmail($observer);
+        if ($paramsEmail) {
             $this->senderEmail->sendMail(
-                $this->paramsEmail["senderInfo"],
-                $this->paramsEmail["receiverInfo"],
-                $this->paramsEmail["storeID"],
-                $this->paramsEmail["templateID"],
-                $this->paramsEmail["emailTemplateVariables"]
+                $paramsEmail["senderInfo"],
+                $paramsEmail["receiverInfo"],
+                $paramsEmail["storeID"],
+                $paramsEmail["templateID"],
+                $paramsEmail["emailTemplateVariables"]
             );
         }
 
@@ -72,37 +58,34 @@ class SendMailOrderPersonalizedEmail implements ObserverInterface
     }
 
     /**
-     * @param $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return mixed
      */
-    private function getOrder($observer)
+    private function getOrder(Observer $observer): mixed
     {
         return $observer->getData('order');
     }
 
     /**
-     * @param $observer
-     * @return bool
+     * @throws NoSuchEntityException
      */
-    private function getProductId($observer)
+    private function getAttributeCodeById(): string
     {
-        $items = $this->getOrder($observer)->getAllVisibleItems();
-        foreach ($items as $item) {
-            $this->productId = $item->getProduct()->getId();
-            return true;
-        }
-        return false;
+        return $this->attributeRepository->get($this->orderPersonalizedEmailConfig->getAttributeIdSelected())->getAttributeCode();
     }
 
     /**
-     * @return false|string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return bool|string
+     * @throws NoSuchEntityException
      */
-    private function validateServiceType()
+    private function getProductId(Observer $observer): bool|string
     {
-        $product = $this->productRepository->getById($this->productId);
-        if ($product->getData('sendmail') != null) {
-            return 'sendmail';
+        $items = $this->getOrder($observer)->getAllVisibleItems();
+        foreach ($items as $item) {
+            if (array_key_exists($this->getAttributeCodeById(), $item->getProduct()->getAttributes())) {
+                return $item->getProduct()->getId();
+            }
         }
         return false;
     }
@@ -111,22 +94,19 @@ class SendMailOrderPersonalizedEmail implements ObserverInterface
      * @param $order
      * @return mixed
      */
-    private function getOrderStoreId($order)
+    private function getOrderStoreId($order): mixed
     {
         return $order->getStore()->getStoreId();
     }
 
     /**
-     * @param $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return bool
+     * @throws NoSuchEntityException
      */
-    private function canSendOrderPersonalizedEmailEmail($observer)
+    private function canSendOrderPersonalizedEmailEmail(Observer $observer): bool
     {
         if (!$this->getProductId($observer)) {
-            return false;
-        }
-
-        if (!$this->orderPersonalizedEmailServiceType = $this->validateServiceType()) {
             return false;
         }
 
@@ -134,10 +114,10 @@ class SendMailOrderPersonalizedEmail implements ObserverInterface
     }
 
     /**
-     * @param $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return array
      */
-    private function sendEmailOrderPersonalizedEmail($observer)
+    private function getParamsEmail(Observer $observer): array
     {
         $order = $this->getOrder($observer);
 
@@ -155,7 +135,7 @@ class SendMailOrderPersonalizedEmail implements ObserverInterface
 
         $storeID = $this->getOrderStoreId($order);
 
-        $templateID = $this->getOrderPersonalizedEmailTemplateId();
+        $templateID = $this->orderPersonalizedEmailConfig->getOrderPersonalizedEmailTemplateExample();
 
         return [
             "senderInfo" => $senderInfo,
@@ -164,28 +144,5 @@ class SendMailOrderPersonalizedEmail implements ObserverInterface
             "templateID" => $templateID,
             "emailTemplateVariables" => $emailTemplateVariables
         ];
-    }
-
-    /**
-     * @return mixed|void
-     */
-    private function getOrderPersonalizedEmailTemplateId()
-    {
-        if ($this->orderPersonalizedEmailServiceType == 'sendmail') {
-            return $this->orderPersonalizedEmailConfig->getOrderPersonalizedEmailTemplateExample();
-        }
-    }
-
-    /**
-     * @param $observer
-     * @return bool
-     */
-    private function canSendEmail($observer)
-    {
-        if ($this->canSendOrderPersonalizedEmailEmail($observer)) {
-            $this->paramsEmail = $this->sendEmailOrderPersonalizedEmail($observer);
-            return true;
-        }
-        return false;
     }
 }

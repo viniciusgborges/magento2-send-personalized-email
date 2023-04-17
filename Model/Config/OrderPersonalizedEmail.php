@@ -4,19 +4,16 @@ declare(strict_types=1);
 namespace Vbdev\PersonalizedEmail\Model\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class OrderPersonalizedEmail
 {
-    const ORDER_PERSONALIZED_EMAIL_ENABLED = 'sales_email/personalized_email/enabled';
-    const ORDER_PERSONALIZED_EMAIL_SENDER = 'sales_email/personalized_email/identity';
-    const ORDER_PERSONALIZED_EMAIL_TEMPLATE_EXAMPLE = 'sales_email/personalized_email/template_example';
-    const ORDER_PERSONALIZED_EMAIL_COPY_TO = 'sales_email/personalized_email/copy_to';
-    const ORDER_PERSONALIZED_EMAIL_COPY_METHOD = 'sales_email/personalized_email/copy_method';
+    const XML_PERSONALIZED_EMAIL_ENABLED = 'sales_email/personalized_email/enabled';
+    const XML_PERSONALIZED_EMAIL_SENDER = 'sales_email/personalized_email/identity';
+    const XML_PERSONALIZED_EMAIL_TEMPLATE_EXAMPLE = 'sales_email/personalized_email/template_example';
+    const XML_PATH_ATTRIBUTE_CODE = 'sales_email/personalized_email/custom_attribute_select';
 
-    /**
-     * @var ScopeConfigInterface
-     */
-    public $scopeConfig;
+    public ScopeConfigInterface $scopeConfig;
 
     /**
      * SenderEmailCustom constructor.
@@ -31,55 +28,33 @@ class OrderPersonalizedEmail
     /**
      * @return mixed
      */
-    public function getOrderPersonalizedEmailEnabled()
+    public function getOrderPersonalizedEmailEnabled(): mixed
     {
         return $this->scopeConfig->getValue(
-            self::ORDER_PERSONALIZED_EMAIL_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            self::XML_PERSONALIZED_EMAIL_ENABLED,
+            ScopeInterface::SCOPE_STORE
         );
     }
 
     /**
      * @return mixed
      */
-    public function getOrderPersonalizedEmailEmailSender()
+    public function getOrderPersonalizedEmailEmailSender(): mixed
     {
         return $this->scopeConfig->getValue(
-            self::ORDER_PERSONALIZED_EMAIL_SENDER,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            self::XML_PERSONALIZED_EMAIL_SENDER,
+            ScopeInterface::SCOPE_STORE
         );
     }
 
     /**
      * @return mixed
      */
-    public function getOrderPersonalizedEmailTemplateExample()
+    public function getOrderPersonalizedEmailTemplateExample(): mixed
     {
         return $this->scopeConfig->getValue(
-            self::ORDER_PERSONALIZED_EMAIL_TEMPLATE_EXAMPLE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOrderPersonalizedEmailCopyTo()
-    {
-        return $this->scopeConfig->getValue(
-            self::ORDER_PERSONALIZED_EMAIL_COPY_TO,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOrderPersonalizedEmailCopyMethod()
-    {
-        return $this->scopeConfig->getValue(
-            self::ORDER_PERSONALIZED_EMAIL_COPY_METHOD,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            self::XML_PERSONALIZED_EMAIL_TEMPLATE_EXAMPLE,
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -87,31 +62,40 @@ class OrderPersonalizedEmail
      * Get store config name
      * @return String
      */
-    public function getStoreName()
+    public function getStoreName(): string
     {
         return $this->scopeConfig->getValue(
             'trans_email/ident_sales/name',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
     /**
-     * Get store config Email
-     * @return String
+     * Get store Config Email
+     * @param $type
+     * @return string
      */
-    public function getStoreEmail($type)
+    public function getStoreEmail($type): string
     {
         return $this->scopeConfig->getValue(
             "trans_email/ident_$type/email",
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
     /**
      * @return String
      */
-    public function getOrderPersonalizedEmailStoreEmail()
+    public function getOrderPersonalizedEmailStoreEmail(): string
     {
         return $this->getStoreEmail($this->getOrderPersonalizedEmailEmailSender());
+    }
+
+    /**
+     * @return string
+     */
+    public function getAttributeIdSelected(): string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_ATTRIBUTE_CODE, ScopeInterface::SCOPE_STORE);
     }
 }

@@ -3,48 +3,40 @@ declare(strict_types=1);
 
 namespace Vbdev\PersonalizedEmail\Model;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Translate\Inline\StateInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
 class SenderEmail
 {
     /**
-     * @var StoreManagerInterface
-     */
-    public $storeManager;
-
-    /**
      * @var StateInterface
      */
-    public $inlineTranslation;
+    public StateInterface $inlineTranslation;
 
     /**
      * @var TransportBuilder
      */
-    public $transportBuilder;
+    public TransportBuilder $transportBuilder;
 
     /**
      * @var LoggerInterface
      */
-    public $logger;
+    public LoggerInterface $logger;
 
     /**
      * SenderEmail constructor.
-     * @param StoreManagerInterface $storeManager
      * @param StateInterface $inlineTranslation
      * @param TransportBuilder $transportBuilder
      * @param LoggerInterface $logger
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        StateInterface $inlineTranslation,
-        TransportBuilder $transportBuilder,
-        LoggerInterface $logger
+        StateInterface        $inlineTranslation,
+        TransportBuilder      $transportBuilder,
+        LoggerInterface       $logger
     ) {
-        $this->storeManager = $storeManager;
         $this->inlineTranslation = $inlineTranslation;
         $this->transportBuilder = $transportBuilder;
         $this->logger = $logger;
@@ -57,9 +49,10 @@ class SenderEmail
      * @param $templateID
      * @param $emailTemplateVariables
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
+     * @throws MailException
      */
-    public function sendMail($senderInfo, $receiverInfo, $storeID, $templateID, $emailTemplateVariables)
+    public function sendMail($senderInfo, $receiverInfo, $storeID, $templateID, $emailTemplateVariables): void
     {
         $this->inlineTranslation->suspend();
         $this->generateTemplate($senderInfo, $receiverInfo, $storeID, $templateID, $emailTemplateVariables);
@@ -81,10 +74,11 @@ class SenderEmail
      * @param $templateID
      * @param $emailTemplateVariables
      * @return $this
+     * @throws MailException
      */
-    public function generateTemplate($senderInfo, $receiverInfo, $storeID, $templateID, $emailTemplateVariables)
+    public function generateTemplate($senderInfo, $receiverInfo, $storeID, $templateID, $emailTemplateVariables): static
     {
-        $template = $this->transportBuilder->setTemplateIdentifier($templateID)
+        $this->transportBuilder->setTemplateIdentifier($templateID)
             ->setTemplateOptions(
                 [
                     'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
@@ -92,7 +86,7 @@ class SenderEmail
                 ]
             )
             ->setTemplateVars($emailTemplateVariables)
-            ->setFrom($senderInfo)
+            ->setFromByScope($senderInfo)
             ->addTo($receiverInfo['email'], $receiverInfo['name']);
         return $this;
     }

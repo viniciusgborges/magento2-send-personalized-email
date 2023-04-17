@@ -4,7 +4,7 @@
 
 ## Main Functionalities
 - Attribute-based email sending module.
-- The module will send an email to the customer who buys a product that has the "sendmail" attribute defined.
+- The module will send an e-mail to the customer who makes a purchase containing a product with the attribute that was defined in the Select attribute code field in **Stores->Configuration->Sales->Sales Emails->Personalized Email->Custom Attribute Code Select**
 - The module offers a configuration in the admin, in **Stores->Configuration->Sales->Sales Emails->Personalized Email**
 - In the admin settings, you can select the email template to be sent, but if no template is selected, the module has a default template, which you can include in view/frontend/email/personalized_email_template_example_default.html
 - In the admin you can also select the sender email

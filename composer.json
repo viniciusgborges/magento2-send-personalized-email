@@ -24,7 +24,7 @@
     "AFL-3.0"
   ],
   "require": {
-    "php": "~7.4"
+    "php": "*"
   },
   "autoload": {
     "files": [ "registration.php" ],
