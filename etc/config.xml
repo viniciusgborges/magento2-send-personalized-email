@@ -3,9 +3,9 @@
     <default>
         <sales_email>
             <personalized_email>
-                <enabled>1</enabled>
+                <enabled>0</enabled>
                 <template_example>sales_email_personalized_email_template_example</template_example>
-                <identity>sales</identity>
+                <sender_email>sales</sender_email>
             </personalized_email>
         </sales_email>
     </default>

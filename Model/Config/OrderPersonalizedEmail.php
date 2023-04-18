@@ -9,7 +9,7 @@ use Magento\Store\Model\ScopeInterface;
 class OrderPersonalizedEmail
 {
     const XML_PERSONALIZED_EMAIL_ENABLED = 'sales_email/personalized_email/enabled';
-    const XML_PERSONALIZED_EMAIL_SENDER = 'sales_email/personalized_email/identity';
+    const XML_PERSONALIZED_EMAIL_SENDER = 'sales_email/personalized_email/sender_email';
     const XML_PERSONALIZED_EMAIL_TEMPLATE_EXAMPLE = 'sales_email/personalized_email/template_example';
     const XML_PATH_ATTRIBUTE_CODE = 'sales_email/personalized_email/custom_attribute_select';
 
