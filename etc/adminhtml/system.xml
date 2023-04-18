@@ -30,7 +30,7 @@
                 </field>
                 <field id="identity" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>Order Cancel Email Sender</label>
+                    <label>Sender Email</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                     <depends>
                         <field id="enabled">1</field>
