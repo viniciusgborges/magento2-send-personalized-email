@@ -9,6 +9,8 @@
 - In the admin settings, you can select the email template to be sent, but if no template is selected, the module has a default template, which you can include in view/frontend/email/personalized_email_template_example_default.html
 - In the admin you can also select the sender email
 
+https://user-images.githubusercontent.com/99985671/232643562-b5afbd38-4849-4fce-90d0-d95cc140d6b5.mp4
+
 ### Type 1: Zip file
 
 - Unzip the zip file in `app/code/Vbdev`
