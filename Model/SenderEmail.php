@@ -52,7 +52,7 @@ class SenderEmail
      * @throws LocalizedException
      * @throws MailException
      */
-    public function sendMail($senderInfo, $receiverInfo, $storeID, $templateID, $emailTemplateVariables): void
+    public function sendMail($senderInfo, $receiverInfo, $storeID, $templateID, $emailTemplateVariables)
     {
         $this->inlineTranslation->suspend();
         $this->generateTemplate($senderInfo, $receiverInfo, $storeID, $templateID, $emailTemplateVariables);
@@ -76,7 +76,7 @@ class SenderEmail
      * @return $this
      * @throws MailException
      */
-    public function generateTemplate($senderInfo, $receiverInfo, $storeID, $templateID, $emailTemplateVariables): static
+    public function generateTemplate($senderInfo, $receiverInfo, $storeID, $templateID, $emailTemplateVariables)
     {
         $this->transportBuilder->setTemplateIdentifier($templateID)
             ->setTemplateOptions(

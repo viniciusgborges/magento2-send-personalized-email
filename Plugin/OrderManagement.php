@@ -60,15 +60,6 @@ class OrderManagement
     }
 
     /**
-     * @param OrderInterface $result
-     * @return mixed
-     */
-    private function getOrder(OrderInterface $result): mixed
-    {
-        return $result->getData('order');
-    }
-
-    /**
      * @return string
      * @throws NoSuchEntityException
      */
@@ -82,7 +73,7 @@ class OrderManagement
      * @return bool|string
      * @throws NoSuchEntityException
      */
-    private function getProductId(OrderInterface $result): bool|string
+    private function getProductId(OrderInterface $result)
     {
         $items = $result->getAllVisibleItems();
         $selectedAttributeCode = $this->getAttributeCodeById();
@@ -98,7 +89,7 @@ class OrderManagement
      * @param $order
      * @return mixed
      */
-    private function getOrderStoreId($order): mixed
+    private function getOrderStoreId($order)
     {
         return $order->getStore()->getStoreId();
     }
@@ -108,7 +99,7 @@ class OrderManagement
      * @return bool
      * @throws NoSuchEntityException
      */
-    private function canSendOrderPersonalizedEmailEmail(OrderInterface $result): bool
+    private function canSendOrderPersonalizedEmailEmail(OrderInterface $result)
     {
         if (!$this->getProductId($result)) {
             return false;

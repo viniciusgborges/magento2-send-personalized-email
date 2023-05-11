@@ -28,7 +28,7 @@ class OrderPersonalizedEmail
     /**
      * @return mixed
      */
-    public function getOrderPersonalizedEmailEnabled(): mixed
+    public function getOrderPersonalizedEmailEnabled()
     {
         return $this->scopeConfig->getValue(
             self::XML_PERSONALIZED_EMAIL_ENABLED,
@@ -39,7 +39,7 @@ class OrderPersonalizedEmail
     /**
      * @return mixed
      */
-    public function getOrderPersonalizedEmailEmailSender(): mixed
+    public function getOrderPersonalizedEmailEmailSender()
     {
         return $this->scopeConfig->getValue(
             self::XML_PERSONALIZED_EMAIL_SENDER,
@@ -50,7 +50,7 @@ class OrderPersonalizedEmail
     /**
      * @return mixed
      */
-    public function getOrderPersonalizedEmailTemplateExample(): mixed
+    public function getOrderPersonalizedEmailTemplateExample()
     {
         return $this->scopeConfig->getValue(
             self::XML_PERSONALIZED_EMAIL_TEMPLATE_EXAMPLE,
